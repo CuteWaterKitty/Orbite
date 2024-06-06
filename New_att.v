@@ -3,8 +3,8 @@ import math
 
 fn (mut app App) new_att(){
 	mut count := 0
-	match rand.int_in_range(0, 50) or{0}{
-		1{
+	match Attaques_name.from(rand.int_in_range(1, 50) or{0}) or {Attaques_name.@none}{
+		.orbs_annil{
 			for attaque in app.attaques{
 				if attaque.name == Attaques_name.orbs_annil{
 					count += 1
@@ -18,8 +18,8 @@ fn (mut app App) new_att(){
 				app.attaques  << Orbs_annil{Attaques_name.orbs_annil, [rand.int_in_range(0, app.center_list.len) or {0}], 200, 50}	
 			}
 		}
-		2{
-			nb := int(app.score[0]/10 +1)-app.attaques.len
+		.meteor{
+			nb := int(app.nb_atks[0]/10 +1)-app.attaques.len
 			x := app.win_width/(1+nb)
 			y := app.win_height
 
@@ -46,7 +46,7 @@ fn (mut app App) new_att(){
 				app.attaques  << Meteor{Attaques_name.meteor, norm, radius, pos,  200, 500}
 			}
 		}
-		3{
+		.laser{
 			for attaque in app.attaques{
 				if attaque.name == Attaques_name.laser{
 					count += 1
@@ -56,29 +56,30 @@ fn (mut app App) new_att(){
 				}
 			}
 			if count < 1 {
-				nb := int(app.score[0]/10 +1)-app.attaques.len
+				nb := int(app.nb_atks[0]/10 +1) - app.attaques.len
 
 				rota := rand.f64_in_range(0, 2*math.pi) or {0}
 
-				mut sens := rand.int_in_range(0, 2) or {0}
+				mut sens := rand.int_in_range(0, 1) or {0}
 				if sens == 0{
 					sens = -1
 				}
 
 				temps_tour := 2*f64(sens)*math.pi*app.center_list[0].radius/rand.f64_in_range(200, 400) or {200}
-				cooldown := rand.int_in_range(100, 200) or {100}
-				time_laser := rand.int_in_range(300, 500) or {100}
+				cooldown := 100
+				time_laser := rand.int_in_range(100, 200) or {100}
 
 				for laser_num in 0..nb{
 					// name	rotation	temps_tour cooldown	time
-					app.attaques  << Laser{Attaques_name.laser, rota+(math.pi/f64(nb))*laser_num*f64(nb), temps_tour, cooldown, time_laser}
+					rota_perso := rota + (2*math.pi/f64(nb))*laser_num
+					app.attaques  << Laser{Attaques_name.laser, rota_perso, temps_tour, cooldown, time_laser}
 				}
 			}
 		}
-		4{
-			nb := int(app.score[0]/10 +1)-app.attaques.len
+		.missile{
+			nb := int(app.nb_atks[0]/10 +1)-app.attaques.len
 
-			center := rand.int_in_range(0, app.center_list.len) or {0}
+			center := rand.int_in_range(1, app.center_list.len) or {0}
 
 			cooldown := rand.int_in_range(100, 200)	or {100}
 			time_missile := rand.int_in_range(100, 200) or {100}

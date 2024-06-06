@@ -18,9 +18,10 @@ fn on_frame(mut app App){
 				att.render(app)
 			}
 			
+			app.calculate_score()
 			for i in 0 .. app.score.len-1 {
 				app.gg.draw_rounded_rect_filled(40+(i%2)*560, 15+int(i/2)*65, 60, 25, 5, attenuation(gx.rgba(128, 128, 128, 255), transparence) )
-				app.gg.draw_text(40+(i%2)*560, 15+int(i/2)*65, "Score: ${app.score[i+1]}", app.text_cfg)
+				app.gg.draw_text(40+(i%2)*560, 15+int(i/2)*65, "Score: ${int(app.score[i+1]+0.5)}", app.text_cfg)
 			}
 			
 			
@@ -37,7 +38,7 @@ fn on_frame(mut app App){
 	else{	
 		if app.death_screen_time != 0{
 			if app.game{
-				if app.attaques.len < int(app.score[0]/10 +1){
+				if app.attaques.len < int(app.nb_atks[0]/10 +1){
 					app.new_att()
 				}
 
@@ -67,9 +68,10 @@ fn on_frame(mut app App){
 				att.render(app)
 			}
 			
+			app.calculate_score()
 			for i in 0 .. app.score.len-1 {
 				app.gg.draw_rounded_rect_filled(40+(i%2)*560, 15+int(i/2)*65, 60, 25, 5, gx.gray)
-				app.gg.draw_text(40+(i%2)*560, 15+int(i/2)*65, "Score: ${app.score[i+1]}", app.text_cfg)
+				app.gg.draw_text(40+(i%2)*560, 15+int(i/2)*65, "Score: ${int(app.score[i+1]+0.5)}", app.text_cfg)
 			}
 			
 			
@@ -83,7 +85,7 @@ fn on_frame(mut app App){
 
 fn (app App) lobby(transparence u8){
 	app.gg.begin()
-	app.text_rect_render(int(app.win_width/2), int(app.win_height/2), "Score: ${app.score[0]}", transparence)
+	app.text_rect_render(int(app.win_width/2), int(app.win_height/2), "Score: ${int(app.score[0]+0.5)}", transparence)
 
 	app.text_rect_render(int(app.win_width/2), int(app.win_height/2) - 40, "Players nb: ${app.player_nb}", transparence)
 
@@ -129,4 +131,20 @@ fn (app App) text_rect_render(x int, y int, text string, transparence u8){
 	app.gg.draw_rounded_rect_filled(new_x - 5, new_y, lenght, 25, 5, attenuation(gx.gray, transparence))
 	app.gg.draw_text(new_x, new_y + 5, text, app.text_cfg)
 }
+
+fn (mut app App) calculate_score() {
+	if app.players_list.len == app.score.len-1 {
+		mut max_score := app.score[0]
+		for i in 1 .. app.score.len {
+			if app.players_list[i-1].is_alive {
+				app.score[i] = 10*app.nb_atks[i]/(app.mvms[i-1]+1)
+				if app.score[i] > max_score {
+					max_score = app.score[i]
+				}
+			}
+		}
+		app.score[0] = max_score
+	}
+}
+
 

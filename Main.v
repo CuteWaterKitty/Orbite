@@ -51,7 +51,9 @@ mut:
 	player_nb		int
 	players_list	[]Player
 	center_list		[]Center
-	score			[]int
+	nb_atks			[]int	= [0, 0]
+	mvms			[]int	= [0]
+	score			[]f32	= [f32(0), f32(0)]
 
 	// Attaques
 	attaques		[]Attaques
@@ -81,8 +83,6 @@ fn on_init(mut app App) {
 	app.player_nb = 1
 	app.game = false
 	app.gg.begin()
-
-	app.score = [0, 0]
 
 	size := app.gg.window_size()
 	app.win_width 		= size.width

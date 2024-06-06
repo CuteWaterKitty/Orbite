@@ -13,10 +13,10 @@ fn (mut app App) delt_att(){
 		i += 1
 	}
 	
-	app.score[0] += i
-	for y in 1 .. app.score.len {
+	app.nb_atks[0] += i
+	for y in 1 .. app.nb_atks.len {
 		if app.players_list[y-1].is_alive{
-			app.score[y-1] += i
+			app.nb_atks[y] += i
 		}
 	}
 }

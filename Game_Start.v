@@ -2,7 +2,7 @@
 import math
 import gx
 
-const color_player = [gx.dark_red, gx.cyan, gx.dark_blue, gx.light_red]
+const color_player = [gx.pink, gx.cyan, gx.yellow, gx.orange]
 
 fn (mut app App) game_start(){
 	app.attaques = []
@@ -30,6 +30,10 @@ fn (mut app App) game_start(){
 	app.death_screen_time = 35
 	app.game = true
 	for i in 0 .. app.score.len {
+		app.nb_atks[i] = 0
+		if i < app.score.len - 1 {
+			app.mvms[i] = 0
+		}
 		app.score[i] = 0
 	}
 }

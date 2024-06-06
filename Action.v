@@ -179,9 +179,9 @@ fn (mut app App) list_imput_action_key_code_init(){
 	app.list_action_key_code[Actions.dim_p_nb] = int(gg.KeyCode.t)
 	app.list_action_key_code[Actions.aug_p_nb] = int(gg.KeyCode.y)
 
-	mut p_dim	:= int(gg.KeyCode.s)
-	mut p_aug	:= int(gg.KeyCode.d)
-	mut p_sens	:= int(gg.KeyCode.f)
+	mut p_dim	:= int(gg.KeyCode.v)
+	mut p_aug	:= int(gg.KeyCode.b)
+	mut p_sens	:= int(gg.KeyCode.n)
 	// Player 0
 	app.list_imput_action[p_dim] = Actions.dim_center_p0
 	app.list_imput_action[p_aug] = Actions.aug_center_p0
@@ -215,9 +215,9 @@ fn (mut app App) list_imput_action_key_code_init(){
 	app.list_action_key_code[13] = p_aug
 	app.list_action_key_code[14] = p_sens
 
-	p_dim	= int(gg.KeyCode.a)
-	p_aug	= int(gg.KeyCode.z)
-	p_sens	= int(gg.KeyCode.e)
+	p_dim	= int(gg.KeyCode.q)
+	p_aug	= int(gg.KeyCode.a)
+	p_sens	= int(gg.KeyCode.z)
 	// Player 3
 	app.list_imput_action[p_dim] = Actions.dim_center_p3
 	app.list_imput_action[p_aug] = Actions.aug_center_p3
@@ -274,12 +274,16 @@ fn (mut app App) imput_action(index int){
 		.aug_p_nb {
 			if app.player_nb < nb_player_max && !app.game{
 				app.player_nb += 1
+				app.nb_atks << 0
+				app.mvms << 0
 				app.score << 0
 			}
 		}
 		.dim_p_nb {
 			if app.player_nb > 1 && !app.game{
 				app.player_nb -= 1
+				app.nb_atks.delete_last()
+				app.mvms.delete_last()
 				app.score.delete_last()
 			}					
 		}
@@ -296,6 +300,7 @@ fn (mut app App) imput_action(index int){
 			if app.game{
 				if app.players_list[0].center > 0 && app.game{
 					app.players_list[0].center_changer(-1 ,app)
+					app.mvms[0] += 1
 				}
 			}
 		}
@@ -303,12 +308,14 @@ fn (mut app App) imput_action(index int){
 			if app.game{
 				if app.players_list[0].center < app.center_list.len -1{
 					app.players_list[0].center_changer(1 ,app)
+					app.mvms[0] += 1
 				}
 			}
 		}
 		.change_sens_p0 {
 			if app.game{
 				app.players_list[0].temps_tour = -app.players_list[0].temps_tour
+				app.mvms[0] += 1
 			}
 			
 		}
@@ -316,6 +323,7 @@ fn (mut app App) imput_action(index int){
 			if app.player_nb > 1 && app.game{
 				if app.players_list[1].center > 0{
 					app.players_list[1].center_changer(-1 ,app)
+					app.mvms[1] += 1
 				}
 			}	
 		}
@@ -323,18 +331,21 @@ fn (mut app App) imput_action(index int){
 			if app.player_nb > 1 && app.game{
 				if app.players_list[1].center < app.center_list.len -1{
 					app.players_list[1].center_changer(1 ,app)
+					app.mvms[1] += 1
 				}
 			}
 		}
 		.change_sens_p1 {
 			if app.player_nb > 1 && app.game{
 				app.players_list[1].temps_tour = -app.players_list[1].temps_tour
+				app.mvms[1] += 1
 			}
 		}
 		.dim_center_p2 {
 			if app.player_nb > 2 && app.game{
 				if app.players_list[2].center > 0{
 					app.players_list[2].center_changer(-1 ,app)
+					app.mvms[2] += 1
 				}
 			}	
 		}
@@ -342,18 +353,21 @@ fn (mut app App) imput_action(index int){
 			if app.player_nb > 2 && app.game{
 				if app.players_list[2].center < app.center_list.len -1{
 					app.players_list[2].center_changer(1 ,app)
+					app.mvms[2] += 1
 				}
 			}
 		}
 		.change_sens_p2 {
 			if app.player_nb > 2 && app.game{
 				app.players_list[2].temps_tour = -app.players_list[2].temps_tour
+				app.mvms[2] += 1
 			}
 		}
 		.dim_center_p3 {
 			if app.player_nb > 3 && app.game{
 				if app.players_list[3].center > 0{
 					app.players_list[3].center_changer(-1 ,app)
+					app.mvms[3] += 1
 				}
 			}	
 		}
@@ -361,12 +375,14 @@ fn (mut app App) imput_action(index int){
 			if app.player_nb > 3 && app.game{
 				if app.players_list[3].center < app.center_list.len -1{
 					app.players_list[3].center_changer(1 ,app)
+					app.mvms[3] += 1
 				}
 			}
 		}
 		.change_sens_p3 {
 			if app.player_nb > 3 && app.game{
 				app.players_list[3].temps_tour = -app.players_list[3].temps_tour
+				app.mvms[3] += 1
 			}
 		}
 		else{}
